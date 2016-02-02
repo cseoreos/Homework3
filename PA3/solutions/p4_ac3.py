@@ -4,7 +4,6 @@ __email__ = 'Please write your email addresses, separated by commas.'
 
 from collections import deque
 
-
 def ac3(csp, arcs=None):
     """Executes the AC3 or the MAC (p.218 of the textbook) algorithms.
 
@@ -18,9 +17,30 @@ def ac3(csp, arcs=None):
 
     queue_arcs = deque(arcs if arcs is not None else csp.constraints.arcs())
 
-    # TODO implement this
-    pass
+    while queue_arcs:                               
+        (xi, xy) = queue_arcs.pop() 
+        temp = revise(csp, xi, xy)  
+        if(temp[0]):  
+            if (temp[1] == 0):
+                return False                     
+            for constraint in csp.constraints[xi]:
+                if(constraint.var2 != xy):
+                    tup = (constraint.var2, constraint.var1)
+                    if tup not in queue_arcs:
+                        queue_arcs.append(tup)
+    return True
 
 def revise(csp, xi, xj):
     # You may additionally want to implement the 'revise' method.
-    pass
+    removed = False
+    check = []
+    checker = True
+    for constraint in csp.constraints[xi,xj]:
+        for x in xi.domain:
+            for y in xj.domain:
+                if(constraint.is_satisfied(x,y)):
+                    check.append(x)
+                    break
+    if (len(check) != len(xi.domain)):
+        removed = True
+    return (removed, len(check))
