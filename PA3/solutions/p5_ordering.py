@@ -2,6 +2,7 @@
 __author__ = 'Sivasubramanian Chandrasegarampillai, Walter Curnow'
 __email__ = 'rchandra@uci.edu,wcurnow@uci.edu'
 
+from p1_is_complete import *
 
 def select_unassigned_variable(csp):
     """Selects the next unassigned variable, or None if there is no more unassigned variables
@@ -14,9 +15,31 @@ def select_unassigned_variable(csp):
     """
 
     # TODO implement this
-    pass
+    minimum = -1
 
+    if(is_complete(csp)):
+        return None
 
+    unassigned = filter(lambda x: not x.is_assigned(), csp.variables)
+
+    for var in unassigned:
+        if not var.is_assigned():
+            minimum = len(var.domain)
+            varia = var
+            break
+
+    for var in unassigned:
+        if not var.is_assigned():
+            if minimum < len(var.domain):
+                minimum = len(var.domain)
+                varia = var
+            elif minimum <= len(var.domain):
+                for constraint in csp.constraints
+                    minimum = len
+
+    for 
+    return varia
+            
 
 def order_domain_values(csp, variable):
     """Returns a list of (ordered) domain values for the given variable.
