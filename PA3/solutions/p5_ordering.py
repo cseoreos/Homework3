@@ -3,6 +3,7 @@ __author__ = 'Sivasubramanian Chandrasegarampillai, Walter Curnow'
 __email__ = 'rchandra@uci.edu,wcurnow@uci.edu'
 
 from p1_is_complete import *
+from Queue import PriorityQueue
 
 def select_unassigned_variable(csp):
     """Selects the next unassigned variable, or None if there is no more unassigned variables
@@ -13,32 +14,26 @@ def select_unassigned_variable(csp):
     then it picks the variable that is involved in the largest number of constraints on other
     unassigned variables.
     """
-
-    # TODO implement this
-    minimum = -1
-
     if(is_complete(csp)):
         return None
 
     unassigned = filter(lambda x: not x.is_assigned(), csp.variables)
 
-    for var in unassigned:
-        if not var.is_assigned():
+    # Getting a minimum before looping through all the variables to find the right min
+    minimum = len(unassigned[0].domain)
+    varFinal = unassigned[0]
+
+    for var in unassigned[1:]:
+        if minimum > len(var.domain):
             minimum = len(var.domain)
-            varia = var
-            break
-
-    for var in unassigned:
-        if not var.is_assigned():
-            if minimum < len(var.domain):
-                minimum = len(var.domain)
-                varia = var
-            elif minimum <= len(var.domain):
-                for constraint in csp.constraints
-                    minimum = len
-
-    for 
-    return varia
+            varFinal = var
+        elif minimum == len(var.domain):
+            if (len(csp.constraints[var]) > len(csp.constraints[varFinal])):
+                varFinal = var
+            else:
+                varFinal = varFinal
+            
+    return varFinal
             
 
 def order_domain_values(csp, variable):
@@ -48,6 +43,21 @@ def order_domain_values(csp, variable):
     that rules out the fewest choices for the neighboring variables in the constraint graph
     are placed before others.
     """
-
-    # TODO implement this
-    pass
+    rating = 0 #To prioritize
+    queue = PriorityQueue()
+    lister = [] #List that is going to be returned
+    
+    for value in variable.domain:
+        rating = 0 #Reset back to 0 for rating of a new value in the domain of the variable
+        for constraint in csp.constraints[variable]: #Get the constraints of the variable
+            for dim in constraint.var2.domain: #Check with all the value of the constraint varaibles domain to check if the value can be satisfied with these domain values
+                if (constraint.is_satisfied(value, dim)):
+                    rating = rating + 1
+        queue.put((rating, value)) # Ordered by rating
+    
+    while not queue.empty(): #Putting into a list
+        i = 0
+        holder = queue.get()
+        lister.insert(i, holder[1])
+        i = i + 1
+    return lister

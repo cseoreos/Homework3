@@ -39,8 +39,13 @@ def revise(csp, xi, xj):
         for x in xi.domain:
             for y in xj.domain:
                 if(constraint.is_satisfied(x,y)):
+                    checker = True
                     check.append(x)
                     break
-    if (len(check) != len(xi.domain)):
-        removed = True
+                else:
+                    checker = False
+            if(checker == False):
+                xi.domain.remove(x)
+        if (len(check) != len(xi.domain)):
+            removed = True
     return (removed, len(check))
