@@ -28,7 +28,7 @@ def select_unassigned_variable(csp):
             minimum = len(var.domain)
             varFinal = var
         elif minimum == len(var.domain):
-            if (len(csp.constraints[var]) > len(csp.constraints[varFinal])):
+            if (len(csp.constraints[var]) >= len(csp.constraints[varFinal])):
                 varFinal = var
             else:
                 varFinal = varFinal
